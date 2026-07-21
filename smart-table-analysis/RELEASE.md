@@ -2,7 +2,7 @@
 
 > **Version / 版本:** v1.0.0  
 > **Release Date / 发布日期:** 2026-07-21  
-> **Author / 作者:** WorkBuddy AI  
+> **Author / 作者:** 流风
 > **License / 许可证:** MIT
 
 ---
