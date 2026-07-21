@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{REPORT_TITLE}}</title>
+    <style>
+        /* ===== Base ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', sans-serif;
+            background: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; padding: 20px; }
+
+        /* ===== Header ===== */
+        .report-header {
+            background: linear-gradient(135deg, #3498DB 0%, #2ECC71 100%);
+            color: white;
+            padding: 32px 28px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(52,152,219,0.25);
+        }
+        .report-header h1 { font-size: 26px; margin-bottom: 10px; }
+        .report-header .meta { font-size: 14px; opacity: 0.85; }
+        .report-header .meta span { margin-right: 16px; }
+
+        /* ===== Summary Grid ===== */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .summary-item {
+            background: white;
+            padding: 20px 16px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.2s;
+        }
+        .summary-item:hover { transform: translateY(-2px); }
+        .summary-item .number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #3498DB;
+        }
+        .summary-item .label {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-top: 6px;
+        }
+
+        /* ===== Sections ===== */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498DB;
+            padding-bottom: 10px;
+        }
+
+        /* ===== Insight Cards ===== */
+        .insight-card {
+            background: #f8f9fa;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #3498DB;
+            transition: background 0.2s;
+        }
+        .insight-card:hover { background: #ecf0f1; }
+        .insight-card.high { border-left-color: #E74C3C; }
+        .insight-card.medium { border-left-color: #F39C12; }
+        .insight-card.low { border-left-color: #3498DB; }
+        .insight-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+        .insight-body { font-size: 13px; color: #555; }
+        .insight-data { font-size: 12px; color: #7f8c8d; margin-top: 6px; font-style: italic; }
+
+        /* ===== Stat Cards ===== */
+        .stat-card {
+            background: #f0f4f8;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .stat-title { font-weight: 700; font-size: 15px; margin-bottom: 12px; color: #3498DB; }
+        .stat-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 10px;
+            background: white;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .stat-label { color: #7f8c8d; }
+        .stat-value { font-weight: 600; color: #2c3e50; }
+
+        /* ===== Chart Cards ===== */
+        .chart-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .chart-title { font-weight: 700; font-size: 16px; margin-bottom: 12px; }
+        .chart-image {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .chart-desc { font-size: 13px; color: #7f8c8d; margin-top: 10px; }
+
+        /* ===== Data Table ===== */
+        .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .data-table th {
+            background: #3498DB;
+            color: white;
+            padding: 8px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .data-table td { padding: 6px 12px; border-bottom: 1px solid #ecf0f1; }
+        .data-table tr:hover { background: #f8f9fa; }
+        .data-table .numeric { text-align: right; font-weight: 500; }
+
+        /* ===== Quality Badge ===== */
+        .quality-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .quality-high { background: #27AE60; color: white; }
+        .quality-medium { background: #F39C12; color: white; }
+        .quality-low { background: #E74C3C; color: white; }
+
+        /* ===== Footer ===== */
+        .report-footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .stat-items { grid-template-columns: repeat(2, 1fr); }
+            .summary-grid { grid-template-columns: repeat(2, 1fr); }
+            .report-header h1 { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="report-header">
+            <h1>{{REPORT_TITLE}}</h1>
+            <div class="meta">
+                <span>生成时间：{{TIMESTAMP}}</span>
+                <span>数据量：{{ROW_COUNT}} 行 × {{COL_COUNT}} 列</span>
+                <span>质量评分：{{QUALITY_SCORE}}</span>
+            </div>
+        </div>
+
+        <!-- Summary Grid -->
+        <div class="summary-grid">
+            <div class="summary-item">
+                <div class="number">{{ROW_COUNT}}</div>
+                <div class="label">总行数</div>
+            </div>
+            <div class="summary-item">
+                <div class="number">{{COL_COUNT}}</div>
+                <div class="label">总列数</div>
+            </div>
+            <div class="summary-item">
+                <div class="number">{{NUMERIC_COL_COUNT}}</div>
+                <div class="label">数值列</div>
+            </div>
+            <div class="summary-item">
+                <div class="number">{{CATEGORY_COL_COUNT}}</div>
+                <div class="label">分类列</div>
+            </div>
+        </div>
+
+        <!-- Insights Section -->
+        {{INSIGHTS_SECTION}}
+
+        <!-- Statistics Section -->
+        {{STATISTICS_SECTION}}
+
+        <!-- Charts Section -->
+        {{CHARTS_SECTION}}
+
+        <!-- Data Preview -->
+        <div class="section">
+            <div class="section-title">数据预览（前20行）</div>
+            {{DATA_TABLE}}
+        </div>
+
+        <!-- Footer -->
+        <div class="report-footer">
+            报告由智能表格分析 Skill 自动生成 | {{TIMESTAMP}}
+        </div>
+    </div>
+</body>
+</html>
